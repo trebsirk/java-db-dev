@@ -1,3 +1,4 @@
-# My Java Project
+# Dmeo Project Java + Postgresql
 
-This is a simple Java project template.
+demo of CRUD operations in Java. 
+
