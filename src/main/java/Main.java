@@ -2,9 +2,8 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
 
-import models.DatabaseUtils;
+import DAOs.PersonDAOImpl;
 import models.Person;
-import models.PersonDAO;
 import services.DBConnection;
 
 public class Main {
@@ -15,10 +14,10 @@ public class Main {
         // Connection conn = new DBConnection().getConnection();
         
         // PersonDAO personDAO = new DatabaseUtils(optConn.orElseThrow());
-        PersonDAO personDAO = new DatabaseUtils(conn);
+        PersonDAOImpl pdaoimpl = new PersonDAOImpl(conn);
 
         // Use the DAO methods
-        List<Person> persons = personDAO.getAllPersons();
+        List<Person> persons = pdaoimpl.getAll();
         persons.forEach(person -> 
             System.out.println("Name: " + person.name() + ", Age: " + person.age()));
     }
