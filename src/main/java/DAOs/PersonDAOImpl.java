@@ -1,5 +1,4 @@
 package DAOs;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,6 +7,10 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import models.Person;
 
@@ -115,4 +118,29 @@ public class PersonDAOImpl implements PersonDAO {
         }
     }
 
+    @Override
+    public Optional<Person> fromJSON(String jsonString) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Person person = null;
+        try {
+            person = objectMapper.readValue(jsonString, Person.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return Optional.ofNullable(person);
+    }
+
+    @Override
+    public String toJSON(Person p) {
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString;
+        try {
+            jsonString = mapper.writeValueAsString(p);
+            return jsonString;
+        } catch (JsonProcessingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
