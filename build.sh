@@ -1,7 +1,9 @@
 #!/bin/bash
 
+
 mvn clean compile package
 mvn dependency:copy-dependencies
+
 exit 0
 
 # Define project directories
