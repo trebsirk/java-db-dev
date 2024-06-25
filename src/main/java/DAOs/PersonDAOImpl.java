@@ -8,16 +8,20 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import models.CrudLogEvent;
 import models.Person;
 
 public class PersonDAOImpl implements PersonDAO {
 
     private final Connection connection;
     private final String table = "persons";
+    private static final Logger logger = Logger.getLogger(PersonDAOImpl.class.toString());
+
 
     public PersonDAOImpl(Connection connection) {
         this.connection = connection;
@@ -25,9 +29,13 @@ public class PersonDAOImpl implements PersonDAO {
 
     @Override
     public Person getById(int id) {
+
+        long startTime = System.currentTimeMillis();
+        CrudLogEvent msg = null;
+        
         String query = "SELECT name, age FROM " + table + " WHERE id = ?";
         Person person = null;
-
+        
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -36,17 +44,26 @@ public class PersonDAOImpl implements PersonDAO {
                 String name = resultSet.getString("name");
                 Integer age = resultSet.getObject("age") != null ? resultSet.getInt("age") : null;
                 person = new Person(id, name, age);
-            }
+            } 
+            long endTime = System.currentTimeMillis();
+            msg = new CrudLogEvent(startTime, "getById", true, endTime-startTime);
 
         } catch (SQLException e) {
             e.printStackTrace();
+            long endTime = System.currentTimeMillis();
+            msg = new CrudLogEvent(startTime, "getById", false, endTime-startTime);
         }
-
+        
+        logger.info(msg.toString());
         return person;
     }
-
+    
     @Override
     public List<Person> getAll() {
+        
+        long startTime = System.currentTimeMillis();
+        CrudLogEvent msg = null;
+
         List<Person> persons = new ArrayList<>();
         String query = "SELECT id, name, age FROM " + table;
 
@@ -59,11 +76,16 @@ public class PersonDAOImpl implements PersonDAO {
                 Integer age = resultSet.getObject("age") != null ? resultSet.getInt("age") : null;
                 persons.add(new Person(id, name, age));
             }
+            long endTime = System.currentTimeMillis();
+            msg = new CrudLogEvent(startTime, "getById", true, endTime-startTime);
 
         } catch (SQLException e) {
             e.printStackTrace();
+            long endTime = System.currentTimeMillis();
+            msg = new CrudLogEvent(startTime, "getById", false, endTime-startTime);
         }
 
+        logger.info(msg.toString());
         return persons;
     }
 
