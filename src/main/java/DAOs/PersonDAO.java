@@ -9,7 +9,6 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,8 +20,6 @@ public class PersonDAO implements DAO<Person> {
 
     private final Connection connection;
     private final String table = "persons";
-    private static final Logger logger = Logger.getLogger(PersonDAO.class.toString());
-
 
     public PersonDAO(Connection connection) {
         this.connection = connection;
