@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import org.junit.Test;
 
-import DAOs.PersonDAOImpl;
+import DAOs.PersonDAO;
 
 public class PersonTest {
 
@@ -25,7 +25,7 @@ public class PersonTest {
         String jsonString = """
         {"id": 1,"name": "Cleetus","age": 30}
         """;
-        Optional<Person> pOpt = new PersonDAOImpl(null).fromJSON(jsonString);
+        Optional<Person> pOpt = new PersonDAO(null).fromJSON(jsonString);
         assertFalse(pOpt.isEmpty());
         Person p = pOpt.get();//.orElseGet(() -> new Person(null, null, null));
         assertEquals((int)p.id(), 1);
@@ -38,7 +38,7 @@ public class PersonTest {
         String jsonString = """
         {"name": "Cleetus", "age": 123}
         """;
-        Optional<Person> pOpt = new PersonDAOImpl(null).fromJSON(jsonString);
+        Optional<Person> pOpt = new PersonDAO(null).fromJSON(jsonString);
         assertFalse(pOpt.isEmpty());
         Person p = pOpt.get();//.orElseGet(() -> new Person(null, null, null));
         assertEquals(p.id(), null);
@@ -51,7 +51,7 @@ public class PersonTest {
         String jsonString = """
         {"id": null,"name": "Cleetus", "age": 123}
         """;
-        Optional<Person> pOpt = new PersonDAOImpl(null).fromJSON(jsonString);
+        Optional<Person> pOpt = new PersonDAO(null).fromJSON(jsonString);
         assertFalse(pOpt.isEmpty());
         Person p = pOpt.get();//.orElseGet(() -> new Person(null, null, null));
         assertEquals(p.id(), null);
@@ -64,7 +64,7 @@ public class PersonTest {
         String jsonString = """
         {"id": 1,"name": "Cleetus"}
         """;
-        Optional<Person> pOpt = new PersonDAOImpl(null).fromJSON(jsonString);
+        Optional<Person> pOpt = new PersonDAO(null).fromJSON(jsonString);
         assertFalse(pOpt.isEmpty());
         Person p = pOpt.get();//.orElseGet(() -> new Person(null, null, null));
         assertEquals((int)p.id(), 1);
@@ -77,7 +77,7 @@ public class PersonTest {
         String jsonString = """
         {"id": 1,"name": "Cleetus", "age": null}
         """;
-        Optional<Person> pOpt = new PersonDAOImpl(null).fromJSON(jsonString);
+        Optional<Person> pOpt = new PersonDAO(null).fromJSON(jsonString);
         assertFalse(pOpt.isEmpty());
         Person p = pOpt.get();//.orElseGet(() -> new Person(null, null, null));
         assertEquals((int)p.id(), 1);
@@ -90,7 +90,7 @@ public class PersonTest {
         String jsonString = """
         {"id": 111,"age":222}
         """;
-        Optional<Person> pOpt = new PersonDAOImpl(null).fromJSON(jsonString);
+        Optional<Person> pOpt = new PersonDAO(null).fromJSON(jsonString);
         assertFalse(pOpt.isEmpty());
         Person p = pOpt.get();//.orElseGet(() -> new Person(null, null, null));
         assertEquals((int)p.id(), 111);
@@ -103,7 +103,7 @@ public class PersonTest {
         String jsonString = """
         {"id": 111,"name":null, "age":222}
         """;
-        Optional<Person> pOpt = new PersonDAOImpl(null).fromJSON(jsonString);
+        Optional<Person> pOpt = new PersonDAO(null).fromJSON(jsonString);
         assertFalse(pOpt.isEmpty());
         Person p = pOpt.get();//.orElseGet(() -> new Person(null, null, null));
         assertEquals((int)p.id(), 111);
@@ -117,7 +117,7 @@ public class PersonTest {
         {"id":1,"name":"Cleetus","age":30}
         """;
         Person p = new Person(1, "Cleetus", 30);
-        String jsonString = new PersonDAOImpl(null).toJSON(p);
+        String jsonString = new PersonDAO(null).toJSON(p);
         assertTrue(jsonStringExpected.trim().equals(jsonString.trim()));
     }
 }

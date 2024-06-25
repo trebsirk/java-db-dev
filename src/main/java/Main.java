@@ -1,47 +1,52 @@
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import DAOs.PersonDAOImpl;
+import DAOs.PersonDAO;
+import models.CrudLogEvent;
+import models.CrudResult;
 import models.Person;
+import services.CrudService;
 import services.DBConnection;
 import utils.CLI;
 import utils.DAOAction;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         Optional<Connection> optConn = new DBConnection().getOptConnection();
         Connection conn = optConn.orElseThrow();
 
-        PersonDAOImpl pdaoimpl = new PersonDAOImpl(conn);
+        PersonDAO pdao = new PersonDAO(conn);
+        CrudService<Person> pservice = new CrudService<Person>(pdao);
 
         List<DAOAction> ch = Arrays.asList(DAOAction.values());
-        //ch.stream().map(a -> a);
         List<String> choices = ch.stream().map((DAOAction v) -> v.name()).toList();
         
         DAOAction choice = new CLI().readChoice(choices);
 
         switch (choice) {
             case GET:
-                Person person = pdaoimpl.getById(1);
+                Person person = pservice.getById(1);
                 System.out.println(person);
                 break;
             case GETALL:
-                System.out.println("GETALL selected");
-                List<Person> persons = pdaoimpl.getAll();
+                List<Person> persons = pservice.getAll();
                 persons.forEach(p -> System.out.println(p));
                 break;
             case ADD:
-                System.out.println("ADD not implemented");
+                CrudResult resCre = pservice.create(new Person(null, "tony", 42), new CrudLogEvent(System.currentTimeMillis(), "create", false, null, -1));
+                System.out.println(resCre);
                 break;
             case DELETE:
-                System.out.println("DELETE not implemented");
+                CrudResult resDel = pservice.delete(3, new CrudLogEvent(System.currentTimeMillis(), "delete", false, null, -1));
+                System.out.println(resDel);
                 break;
             default:
                 System.out.println("error: bad input");
                 break;
         }
-
+        conn.close();
     }
 }
