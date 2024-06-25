@@ -14,7 +14,20 @@ import utils.CLI;
 import utils.DAOAction;
 
 public class Main {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args)  {
+        try {
+            crudDemo();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    static void kvDemo() {
+        
+    }
+
+    static void crudDemo() throws SQLException {
         Optional<Connection> optConn = new DBConnection().getOptConnection();
         Connection conn = optConn.orElseThrow();
 

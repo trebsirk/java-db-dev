@@ -1,14 +1,17 @@
 package services;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import DAOs.DAO;
+import DAOs.PersonDAO;
 import models.CrudLogEvent;
 import models.CrudResult;
 
 public class CrudService<T> {
 
     private final DAO<T> dao;
+    private static final Logger logger = Logger.getLogger(PersonDAO.class.toString());
 
     public CrudService(DAO<T> dao) {
         this.dao = dao;
@@ -29,7 +32,7 @@ public class CrudService<T> {
         logEvent = logEvent.withSuccess(res.success());
         logEvent = logEvent.withMsg(res.errorMessage().orElseGet(() -> ""));
         logEvent = logEvent.withExecutionTimeMs(endTime-startTime);
-        System.out.println("SERVICE " + logEvent);
+        logger.info("SERVICE " + logEvent);
         return res;
     }
 
@@ -40,7 +43,7 @@ public class CrudService<T> {
         logEvent = logEvent.withSuccess(res.success());
         logEvent = logEvent.withMsg(res.errorMessage().orElseGet(() -> ""));
         logEvent = logEvent.withExecutionTimeMs(endTime-startTime);
-        System.out.println("SERVICE " + logEvent);
+        logger.info("SERVICE " + logEvent);
         return res;
     }
 
@@ -51,7 +54,7 @@ public class CrudService<T> {
         logEvent = logEvent.withSuccess(res.success());
         logEvent = logEvent.withMsg(res.errorMessage().orElseGet(() -> ""));
         logEvent = logEvent.withExecutionTimeMs(endTime-startTime);
-        System.out.println("SERVICE " + logEvent);
+        logger.info("SERVICE " + logEvent);
         return res;
     }
 
