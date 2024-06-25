@@ -29,11 +29,12 @@ public class PersonDAOImpl implements PersonDAO {
 
     @Override
     public Person getById(int id) {
+
         long startTime = System.currentTimeMillis();
+        CrudLogEvent msg = null;
         
         String query = "SELECT name, age FROM " + table + " WHERE id = ?";
         Person person = null;
-        CrudLogEvent msg = null;
         
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, id);
@@ -56,9 +57,13 @@ public class PersonDAOImpl implements PersonDAO {
         logger.info(msg.toString());
         return person;
     }
-
+    
     @Override
     public List<Person> getAll() {
+        
+        long startTime = System.currentTimeMillis();
+        CrudLogEvent msg = null;
+
         List<Person> persons = new ArrayList<>();
         String query = "SELECT id, name, age FROM " + table;
 
@@ -71,11 +76,16 @@ public class PersonDAOImpl implements PersonDAO {
                 Integer age = resultSet.getObject("age") != null ? resultSet.getInt("age") : null;
                 persons.add(new Person(id, name, age));
             }
+            long endTime = System.currentTimeMillis();
+            msg = new CrudLogEvent(startTime, "getById", true, endTime-startTime);
 
         } catch (SQLException e) {
             e.printStackTrace();
+            long endTime = System.currentTimeMillis();
+            msg = new CrudLogEvent(startTime, "getById", false, endTime-startTime);
         }
 
+        logger.info(msg.toString());
         return persons;
     }
 
