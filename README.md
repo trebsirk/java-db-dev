@@ -4,7 +4,7 @@ This is a demo of database operations in Java, including CRUD ops in SQL with Po
 
 It implements the Service layer and Data Access Object (DAO) Layer. 
 
-The code uses environmental variables for db access, which should be in a `.env` file if running locally. 
+The code uses environmental variables for db access. 
 
 Build and run (in linux/mac) with 
 ```bash
