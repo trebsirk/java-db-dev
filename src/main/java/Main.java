@@ -24,12 +24,13 @@ public class Main {
 
         switch (choice) {
             case GET:
-                System.out.println("GET not implemented");
+                Person person = pdaoimpl.getById(1);
+                System.out.println(person);
                 break;
             case GETALL:
                 System.out.println("GETALL selected");
                 List<Person> persons = pdaoimpl.getAll();
-                persons.forEach(person -> System.out.println(person));
+                persons.forEach(p -> System.out.println(p));
                 break;
             case ADD:
                 System.out.println("ADD not implemented");

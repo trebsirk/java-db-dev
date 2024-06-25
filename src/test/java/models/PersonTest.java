@@ -45,6 +45,5 @@ public class PersonTest {
         Person p = new Person(1, "Cleetus", 30);
         String jsonString = new PersonDAOImpl(null).toJSON(p);
         assertTrue(jsonStringExpected.trim().equals(jsonString.trim()));
-                
     }
 }
