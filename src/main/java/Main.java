@@ -4,30 +4,45 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import DAOs.DataAccessException;
 import DAOs.PersonDAO;
+import DAOs.UserSessionDAOImpl;
 import models.CrudLogEvent;
 import models.CrudResult;
 import models.Person;
+import models.UserSession;
+import redis.clients.jedis.JedisPoolConfig;
 import services.CrudService;
 import services.DBConnection;
+import services.UserSessionService;
 import utils.CLI;
 import utils.DAOAction;
 
 public class Main {
     public static void main(String[] args)  {
-        try {
-            crudDemo();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        // crudDemo();
+        kvDemo();
     }
 
     static void kvDemo() {
+        UserSessionDAOImpl di = new UserSessionDAOImpl(new JedisPoolConfig(), "localhost", 6379, new ObjectMapper());
+        System.out.println(di);
+        UserSessionService s = new UserSessionService(di);
+        System.out.println(s);
+
+        try {
+            UserSession us = s.createSession(1, 10000);
+            System.out.println(us);
+        } catch (DataAccessException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         
     }
 
-    static void crudDemo() throws SQLException {
+    static void crudDemo() {
         Optional<Connection> optConn = new DBConnection().getOptConnection();
         Connection conn = optConn.orElseThrow();
 
@@ -60,6 +75,11 @@ public class Main {
                 System.out.println("error: bad input");
                 break;
         }
-        conn.close();
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }

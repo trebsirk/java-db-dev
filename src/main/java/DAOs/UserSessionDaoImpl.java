@@ -38,6 +38,7 @@ public class UserSessionDAOImpl implements UserSessionDAO {
 
     @Override
     public UserSession create(long userId, long timeout) throws DataAccessException {
+        // timeout param is milliseconds
         try (Jedis jedis = jedisPool.getResource()) {
             String sessionId = generateSessionId();
             UserSession session = new UserSession(sessionId, userId, timeout);
@@ -47,6 +48,7 @@ public class UserSessionDAOImpl implements UserSessionDAO {
             } catch (JsonProcessingException e) {
                 throw new DataAccessException("Error serializing session data to JSON", e);
             }
+            System.out.println("sessionId " + sessionId);
             jedis.set(sessionId, sessionJson);
             jedis.expire(sessionId, (int) TimeUnit.MILLISECONDS.toSeconds(timeout));
             return session;
